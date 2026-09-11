@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light mode — locked per Master Doc Part B2. Do not edit these values
+   without Rico's sign-off; add new tokens instead of overloading these. */
+:root {
+  --color-background: #F4F0E8;
+  --color-surface: #EAE4D6;
+  --color-text-primary: #252321;
+  --color-text-muted: #8C877D;
+  --color-primary: #6E2028;
+  --color-accent: #B49A63;
+
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* Dark mode — hand-tuned second palette, not an inversion. Applied when
+   the <html> element carries the .dark class (see Part B2). */
+.dark {
+  --color-background: #1B1917;
+  --color-surface: #242220;
+  --color-text-primary: #F1ECE1;
+  --color-text-muted: #A39C8E;
+  --color-primary: #A8434C;
+  --color-accent: #C7AD79;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Liturgical/content headings use the serif face per the B3 rule:
+   content = traditional, software = modern. Applied via className,
+   e.g. <h1 className="font-serif">Sunday — 13 September</h1> */
