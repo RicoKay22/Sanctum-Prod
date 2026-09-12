@@ -69,6 +69,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_workspace_with_admin: {
+        Args: { _name: string }
+        Returns: {
+          created_at: string
+          id: string
+          name: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "workspaces"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       is_workspace_admin: { Args: { _workspace_id: string }; Returns: boolean }
       is_workspace_member: { Args: { _workspace_id: string }; Returns: boolean }
     }

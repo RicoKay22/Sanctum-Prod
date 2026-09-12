@@ -14,24 +14,19 @@ export async function createWorkspace(formData: FormData) {
     redirect('/login');
   }
 
-  const { data: workspace, error: workspaceError } = await supabase
-    .from('workspaces')
-    .insert({ name })
-    .select()
-    .single();
+  // Single atomic operation — see create_workspace_with_admin() in the
+  // SQL. This replaces the old two-step insert (workspace, then
+  // membership), which hit a real RLS ordering problem: Supabase's
+  // .insert().select() reads the new row back immediately, and that
+  // read is gated by the SELECT policy — which requires membership
+  // that doesn't exist yet at that point. The RPC does both inserts
+  // server-side under one transaction, sidestepping the issue entirely.
+  const { error } = await supabase.rpc('create_workspace_with_admin', {
+    _name: name,
+  });
 
-  if (workspaceError || !workspace) {
-    redirect(
-      `/dashboard?error=${encodeURIComponent(workspaceError?.message ?? 'Could not create workspace')}`
-    );
-  }
-
-  const { error: memberError } = await supabase
-    .from('workspace_members')
-    .insert({ workspace_id: workspace.id, user_id: userId, role: 'admin' });
-
-  if (memberError) {
-    redirect(`/dashboard?error=${encodeURIComponent(memberError.message)}`);
+  if (error) {
+    redirect(`/dashboard?error=${encodeURIComponent(error.message)}`);
   }
 
   redirect('/dashboard');
