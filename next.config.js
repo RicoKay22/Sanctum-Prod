@@ -1,9 +1,11 @@
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  // Disabled in dev so hot-reload isn't fighting a service worker cache.
+const withSerwistInit = require('@serwist/next').default;
+
+const withSerwist = withSerwistInit({
+  swSrc: 'app/sw.ts',
+  swDest: 'public/sw.js',
+  // Disabled in dev — same reasoning as before: no reason to fight a
+  // service worker cache while hot-reloading.
   disable: process.env.NODE_ENV === 'development',
-  register: true,
-  skipWaiting: true,
 });
 
 /** @type {import('next').NextConfig} */
@@ -19,4 +21,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withPWA(nextConfig);
+module.exports = withSerwist(nextConfig);
