@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   // Theme toggle UI comes in Phase 2 — for now, default to the visitor's
   // system preference so dark mode isn't dead code sitting unused.
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
+    <html lang="en" className={`${serif.variable} ${sans.variable}`} suppressHydrationWarning>
       <head>
         <script
           // Runs before paint to avoid a light-mode flash for dark-mode users.
