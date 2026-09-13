@@ -1,0 +1,34 @@
+[
+  {
+    "type": "bible",
+    "key": "john-15-1",
+    "translation": "KJV",
+    "title": "John 15:1",
+    "body": "I am the true vine, and my Father is the husbandman.",
+    "source": "bundled"
+  },
+  {
+    "type": "bible",
+    "key": "john-15-1",
+    "translation": "WEB",
+    "title": "John 15:1",
+    "body": "I am the true vine, and my Father is the farmer.",
+    "source": "bundled"
+  },
+  {
+    "type": "creed",
+    "key": "apostles-creed",
+    "translation": null,
+    "title": "The Apostles' Creed",
+    "body": "I believe in God the Father Almighty, Maker of heaven and earth; And in Jesus Christ his only Son our Lord...",
+    "source": "bundled"
+  },
+  {
+    "type": "hymn",
+    "key": "placeholder-hymn-1",
+    "translation": null,
+    "title": "TODO — first public-domain hymn to seed",
+    "body": "TODO",
+    "source": "bundled"
+  }
+]
