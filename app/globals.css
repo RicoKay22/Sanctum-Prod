@@ -34,6 +34,27 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* Subtle entry animation for cards/forms — restrained, not bouncy.
+   Respects reduced-motion preference. */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in-up 400ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
+}
+
 /* Liturgical/content headings use the serif face per the B3 rule:
    content = traditional, software = modern. Applied via className,
    e.g. <h1 className="font-serif">Sunday — 13 September</h1> */
