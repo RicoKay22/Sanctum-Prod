@@ -31,7 +31,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // Runs before paint to avoid a light-mode flash for dark-mode users.
           dangerouslySetInnerHTML={{
             __html: `
-              if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              const saved = localStorage.getItem('sanctum-theme');
+              if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
               }
             `,
