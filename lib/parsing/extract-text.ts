@@ -9,14 +9,8 @@ export async function extractText(file: File): Promise<string> {
     throw new Error('File exceeds the 10MB upload limit.');
   }
 
-  if (file.type === 'text/plain') {
-    return file.text();
-  }
-
-  if (file.type === 'application/pdf') {
-    return extractFromPdf(file);
-  }
-
+  if (file.type === 'text/plain') return file.text();
+  if (file.type === 'application/pdf') return extractFromPdf(file);
   return extractFromImage(file);
 }
 
@@ -34,10 +28,37 @@ async function extractFromPdf(file: File): Promise<string> {
   for (let i = 1; i <= doc.numPages; i++) {
     const page = await doc.getPage(i);
     const content = await page.getTextContent();
-    const pageText = content.items.map((item) => ('str' in item ? item.str : '')).join(' ');
-    fullText += pageText + '\n';
+    fullText += reconstructLines(content.items) + '\n';
   }
   return fullText;
+}
+
+// pdf.js text items carry only x/y positions, not line breaks — a page of
+// text comes back as one flat list of fragments. Group fragments into lines
+// by shared y-position, then sort each line left-to-right by x-position.
+// This was the bug behind the "everything in one blob" test result.
+function reconstructLines(items: unknown[]): string {
+  const Y_TOLERANCE = 2;
+  const lines: { y: number; parts: { x: number; str: string }[] }[] = [];
+
+  for (const raw of items) {
+    const item = raw as { str?: string; transform?: number[] };
+    if (!item.str?.trim() || !item.transform) continue;
+    const [, , , , x, y] = item.transform;
+
+    let line = lines.find((l) => Math.abs(l.y - y) < Y_TOLERANCE);
+    if (!line) {
+      line = { y, parts: [] };
+      lines.push(line);
+    }
+    line.parts.push({ x, str: item.str });
+  }
+
+  // PDF y-axis increases upward — sort top-to-bottom, then left-to-right.
+  lines.sort((a, b) => b.y - a.y);
+  return lines
+    .map((l) => l.parts.sort((a, b) => a.x - b.x).map((p) => p.str).join(' '))
+    .join('\n');
 }
 
 async function extractFromImage(file: File): Promise<string> {

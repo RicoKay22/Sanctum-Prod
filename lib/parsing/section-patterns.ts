@@ -23,7 +23,7 @@ export function matchSectionType(label: string): SectionType | null {
 }
 
 // Matches "Isaiah 6:1-8", "1 Corinthians 13:4-7", "John 15:1"
-const BIBLE_REF_PATTERN = /([1-3]?\s?[A-Za-z]+)\s+(\d+):(\d+)(?:-(\d+))?/;
+const BIBLE_REF_PATTERN = /([1-3]?\s?[A-Za-z]+)\s+(\d+):(\d+)(?:[-–](\d+))?/;
 
 export interface ParsedBibleRef {
   book: string;
