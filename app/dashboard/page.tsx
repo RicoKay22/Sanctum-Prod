@@ -84,6 +84,9 @@ export default async function DashboardPage({
           </div>
         </header>
 
+        <a href="/dashboard/upload" style={{ color: 'var(--primary)' }}>
+  Try the upload parser (Round 2 test) →
+</a>
         <p className="animate-fade-in font-sans text-sm text-text-muted">
           Sunday programme builder coming in Phase 3–5.
         </p>
