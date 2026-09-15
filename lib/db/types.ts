@@ -14,6 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
+      content_library: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          key: string
+          source: string
+          title: string
+          translation: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          key: string
+          source?: string
+          title: string
+          translation?: string | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          key?: string
+          source?: string
+          title?: string
+          translation?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hymn_numbering: {
+        Row: {
+          content_id: string
+          hymnal_edition_id: string
+          id: string
+          number: number
+        }
+        Insert: {
+          content_id: string
+          hymnal_edition_id: string
+          id?: string
+          number: number
+        }
+        Update: {
+          content_id?: string
+          hymnal_edition_id?: string
+          id?: string
+          number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hymn_numbering_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_library"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hymn_numbering_hymnal_edition_id_fkey"
+            columns: ["hymnal_edition_id"]
+            isOneToOne: false
+            referencedRelation: "hymnal_editions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hymnal_editions: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          region: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          region?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          region?: string | null
+        }
+        Relationships: []
+      }
       workspace_members: {
         Row: {
           created_at: string
@@ -49,20 +142,31 @@ export type Database = {
       workspaces: {
         Row: {
           created_at: string
+          hymnal_edition_id: string | null
           id: string
           name: string
         }
         Insert: {
           created_at?: string
+          hymnal_edition_id?: string | null
           id?: string
           name: string
         }
         Update: {
           created_at?: string
+          hymnal_edition_id?: string | null
           id?: string
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "workspaces_hymnal_edition_id_fkey"
+            columns: ["hymnal_edition_id"]
+            isOneToOne: false
+            referencedRelation: "hymnal_editions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -73,6 +177,7 @@ export type Database = {
         Args: { _name: string }
         Returns: {
           created_at: string
+          hymnal_edition_id: string | null
           id: string
           name: string
         }
